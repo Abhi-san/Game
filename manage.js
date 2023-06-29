@@ -18,7 +18,7 @@ let todolist = [];
 let playGame = true;
 
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'custom-views-directory'));
+
 
 app.use(express.static('public'));
 
