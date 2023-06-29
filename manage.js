@@ -37,6 +37,18 @@ app.get('/todo/delete/:id', function (req, res) {
   res.redirect('/todo');
 });
 
+// Serve the app.js file from the public GitHub repository
+app.get('/app.js', function (req, res) {
+  const appJsUrl = 'https://raw.githubusercontent.com/Abhi-san/Game/main/app.js';
+  res.redirect(appJsUrl);
+});
+
+// Serve the style.css file from the public GitHub repository
+app.get('/style.css', function (req, res) {
+  const styleCssUrl = 'https://raw.githubusercontent.com/Abhi-san/Game/main/style.css';
+  res.redirect(styleCssUrl);
+});
+
 app.use(function (req, res, next) {
   res.redirect('/todo');
 });
