@@ -16,10 +16,15 @@ app.use(methodOverride(function (req, res) {
 
 let todolist = [];
 
+app.set('view engine', 'ejs'); // Set the view engine to EJS
+
 app.use(express.static('public'));
 
 app.get('/todo', function (req, res) {
-  res.sendFile(__dirname + '/app.js');
+  res.render('app.ejs', {
+    todolist,
+    clickHandler: "func1();"
+  });
 });
 
 app.get('/todo/:id', function (req, res) {
