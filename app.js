@@ -1,102 +1,65 @@
-//Generate a random number between 1 and 100
-let randomNumber = parseInt((Math.random() * 100) + 1);
-const submit = document.querySelector('#subt');
-const userInput = document.querySelector('#guessField');
-const guessSlot = document.querySelector('.guesses');
-const remaining = document.querySelector('.lastResult');
-const startOver = document.querySelector('.resultParas');
-const lowOrHi = document.querySelector('.lowOrHi');
-const p = document.createElement('p');
+let randomNumber;
 let previousGuesses = [];
 let numGuesses = 1;
 let playGame = true;
 
-if (playGame) {
-    subt.addEventListener('click', function (e) {
-        e.preventDefault();
-        //Grab guess from user
-        const guess = parseInt(userInput.value);
-        validateGuess(guess);
-    });
+function newGame() {
+  randomNumber = getRandomNumber(1, 100);
+  previousGuesses = [];
+  numGuesses = 1;
+  playGame = true;
+}
+
+function getRandomNumber(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 function validateGuess(guess) {
-    if (isNaN(guess)) {
-        alert('Please enter a valid number');
-    } else if (guess < 1) {
-        alert('Please enter a number greater than 1!');
-    } else if (guess > 100) {
-        alert('Please enter a number less than 100!')
+  if (isNaN(guess)) {
+    return 'Please enter a valid number';
+  } else if (guess < 1) {
+    return 'Please enter a number greater than 1!';
+  } else if (guess > 100) {
+    return 'Please enter a number less than 100!';
+  } else {
+    previousGuesses.push(guess);
+
+    if (numGuesses === 11) {
+      return `Game Over! Number was ${randomNumber}`;
     } else {
-        //Keep record of number of attempted guesses
-        previousGuesses.push(guess);
-        //Check to see if game is over
-        if (numGuesses === 11) {
-            displayGuesses(guess);
-            displayMessage(`Game Over! Number was ${randomNumber}`);
-            endGame();
-        } else {
-            //Display previous guessed numbers
-            displayGuesses(guess);
-            //Check guess and display if wrong
-            checkGuess(guess);
-        }
+      return checkGuess(guess);
     }
+  }
 }
 
 function checkGuess(guess) {
-    //Display clue if guess is too high or too low
-    if (guess === randomNumber) {
-        displayMessage(`You guessed correctly!`);
-        endGame();
-    } else if (guess < randomNumber) {
-        displayMessage(`Too low! Try again!`);
-    } else if (guess > randomNumber) {
-        displayMessage(`Too High! Try again!`);
-    }
-}
-
-function displayGuesses(guess) {
-    userInput.value = '';
-    guessSlot.innerHTML += `${guess}  `;
-    numGuesses++
-    remaining.innerHTML = `${11 - numGuesses}  `;
-}
-
-function displayMessage(message) {
-    lowOrHi.innerHTML = `<h1>${message}</h1>`
-}
-
-function endGame() {
-    //Clear user input
-    userInput.value = '';
-    //Disable user input button
-    userInput.setAttribute('disabled', '');
-    //Display Start new Game Button
-    p.classList.add('button');
-    p.innerHTML = `<h1 id="newGame">Start New Game</h1>`
-    startOver.appendChild(p);
+  if (guess === randomNumber) {
     playGame = false;
-    newGame();
+    return 'You guessed correctly!';
+  } else if (guess < randomNumber) {
+    return 'Too low! Try again!';
+  } else if (guess > randomNumber) {
+    return 'Too high! Try again!';
+  }
 }
 
-function newGame() {
-    const newGameButton = document.querySelector('#newGame');
-    newGameButton.addEventListener('click', function () {
-        //Pick a new random number
-        randomNumber = parseInt((Math.random() * 100) + 1);
-        previousGuesses = [];
-        numGuesses = 1;
-        guessSlot.innerHTML = '';
-        lowOrHi.innerHTML = '';
-        remaining.innerHTML = `${11 - numGuesses}  `;
-        userInput.removeAttribute('disabled');
-        startOver.removeChild(p);
-        playGame = true;
-    })
-}
-//Allow to restart game with restart button
-//Change DIV to a form so it can accept the enter key
+function play(guess) {
+  if (!playGame) {
+    return 'The game has ended. Start a new game.';
+  }
 
-//NOTES:
-//NaN != NaN
+  const validationResult = validateGuess(guess);
+  numGuesses++;
+
+  if (playGame && numGuesses > 11) {
+    playGame = false;
+  }
+
+  return validationResult;
+}
+
+newGame(); // Start a new game
+
+// Example usage:
+console.log(play(50)); // Make a guess
+console.log(play(75)); // Make another guess
