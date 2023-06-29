@@ -21,13 +21,27 @@ let guess = 0; // Default guess value
 app.set('view engine', 'ejs');
 
 app.use(express.static('public'));
+// Define the play function
+function play(guess) {
+  if (!playGame) {
+    return 'The game has ended. Start a new game.';
+  }
 
+  const validationResult = validateGuess(guess);
+  numGuesses++;
+
+  if (playGame && numGuesses > 11) {
+    playGame = false;
+  }
+
+  return validationResult;
+}
 app.get('/todo', function (req, res) {
   res.render('app.ejs', {
     todolist,
     clickHandler: "func1();",
     playGame,
-    guess
+    guess, play: play
   });
 });
 
@@ -41,7 +55,7 @@ app.get('/todo/:id', function (req, res) {
       todo,
       clickHandler: "func1();",
       playGame,
-      guess
+      guess, play: play
     });
   } else {
     res.redirect('/todo');
