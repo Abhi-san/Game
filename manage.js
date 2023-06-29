@@ -19,7 +19,7 @@ let todolist = [];
 app.use(express.static('public'));
 
 app.get('/todo', function (req, res) {
-  res.sendFile(__dirname + '/manage.js');
+  res.sendFile(__dirname + '/app.js');
 });
 
 app.get('/todo/:id', function (req, res) {
