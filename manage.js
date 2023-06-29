@@ -15,15 +15,18 @@ app.use(methodOverride(function (req, res) {
 }));
 
 let todolist = [];
+let playGame = true;
 
-app.set('view engine', 'ejs'); // Set the view engine to EJS
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'custom-views-directory'));
 
 app.use(express.static('public'));
 
 app.get('/todo', function (req, res) {
   res.render('app.ejs', {
     todolist,
-    clickHandler: "func1();"
+    clickHandler: "func1();",
+    playGame: playGame
   });
 });
 
@@ -35,7 +38,8 @@ app.get('/todo/:id', function (req, res) {
     res.render('edititem.ejs', {
       todoIdx,
       todo,
-      clickHandler: "func1();"
+      clickHandler: "func1();",
+      playGame: playGame
     });
   } else {
     res.redirect('/todo');
