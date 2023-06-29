@@ -16,33 +16,18 @@ app.use(methodOverride(function (req, res) {
 
 let todolist = [];
 let playGame = true;
+let guess = 0; // Default guess value
 
 app.set('view engine', 'ejs');
 
 app.use(express.static('public'));
 
-// Define the play function
-function play(guess) {
-  if (!playGame) {
-    return 'The game has ended. Start a new game.';
-  }
-
-  const validationResult = validateGuess(guess);
-  numGuesses++;
-
-  if (playGame && numGuesses > 11) {
-    playGame = false;
-  }
-
-  return validationResult;
-}
-
 app.get('/todo', function (req, res) {
   res.render('app.ejs', {
     todolist,
     clickHandler: "func1();",
-    playGame: playGame,
-    play: play // Pass the play function to the view
+    playGame,
+    guess
   });
 });
 
@@ -55,8 +40,8 @@ app.get('/todo/:id', function (req, res) {
       todoIdx,
       todo,
       clickHandler: "func1();",
-      playGame: playGame,
-      play: play // Pass the play function to the view
+      playGame,
+      guess
     });
   } else {
     res.redirect('/todo');
